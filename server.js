@@ -4,25 +4,18 @@ const dotenv = require('dotenv');
 
 const postsRouteHandlers = require('./routes/posts.js');
 const headers = require('./utils/corsHeaders.js');
-const errorHandle = require('./utils/errorHandler.js');
+const { errorHandler } = require('../utils/responseHandler');
 
-dotenv.config({ path: './config.env' }); 
+dotenv.config({ path: './config.env' });
 const DB = process.env.DATABASE.replace(
-    '<password>',
-    process.env.DATABASE_PASSWORD
-  );
+  '<password>',
+  process.env.DATABASE_PASSWORD
+);
 
-mongoose.connect(DB)
-  .then(() => console.log('Connected to MongoDB...'));
+mongoose.connect(DB).then(() => console.log('Connected to MongoDB...'));
 
-const {
-  getPosts,
-  createPost,
-  deletePosts,
-  deletePostById,
-  updatePostById
-} = postsRouteHandlers;
-
+const { getPosts, createPost, deletePosts, deletePostById, updatePostById } =
+  postsRouteHandlers;
 
 const routes = {
   '/posts': {
@@ -33,14 +26,13 @@ const routes = {
   '/posts/:id': {
     DELETE: deletePostById,
     PATCH: updatePostById,
-  }
+  },
 };
 
 function matchRoute(req) {
   const urlSegments = req.url.split('?')[0].split('/');
 
   for (let pattern in routes) {
-
     const patternSegments = pattern.split('/');
 
     if (patternSegments.length !== urlSegments.length) {
@@ -61,12 +53,10 @@ function matchRoute(req) {
     }
   }
 
-  return null;  // 沒有匹配的路由
+  return null; // 沒有匹配的路由
 }
 
-
 const requestListener = (req, res) => {
-
   let body = '';
 
   req.on('data', (chunk) => {
@@ -74,15 +64,14 @@ const requestListener = (req, res) => {
   });
 
   req.on('end', () => {
-
-    let data = {}; 
+    let data = {};
     try {
-        data = JSON.parse(body); 
+      data = JSON.parse(body);
     } catch (error) {
-        if (body !== '') {
-            errorHandle(res, error);
-            return;
-        }
+      if (body !== '') {
+        errorHandle(res, error);
+        return;
+      }
     }
 
     const route = matchRoute(req);
@@ -91,14 +80,7 @@ const requestListener = (req, res) => {
       return route.handler(req, res, data, route.params);
     }
 
-    res.writeHead(404, headers);
-    res.write(
-      JSON.stringify({
-        status: 'false',
-        message: '無此網站路由',
-      })
-    );
-    res.end();
+    errorHandler(res, '無此網站路由', 404);
   });
   if (req.method === 'OPTIONS') {
     res.writeHead(200, headers);
