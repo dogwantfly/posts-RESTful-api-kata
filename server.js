@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 
 const postsRouteHandlers = require('./routes/posts.js');
 const headers = require('./utils/corsHeaders.js');
-const { errorHandler } = require('../utils/responseHandler');
+const { errorHandler } = require('./utils/responseHandler');
 
 dotenv.config({ path: './config.env' });
 const DB = process.env.DATABASE.replace(
@@ -57,6 +57,12 @@ function matchRoute(req) {
 }
 
 const requestListener = (req, res) => {
+  if (req.method === 'OPTIONS') {
+    res.writeHead(200, headers);
+    res.end();
+    return;
+  }
+
   let body = '';
 
   req.on('data', (chunk) => {
@@ -65,11 +71,11 @@ const requestListener = (req, res) => {
 
   req.on('end', () => {
     let data = {};
-    try {
-      data = JSON.parse(body);
-    } catch (error) {
-      if (body !== '') {
-        errorHandle(res, error);
+    if (body !== '') {
+      try {
+        data = JSON.parse(body);
+      } catch (error) {
+        errorHandler(res, error);
         return;
       }
     }
@@ -82,10 +88,6 @@ const requestListener = (req, res) => {
 
     errorHandler(res, '無此網站路由', 404);
   });
-  if (req.method === 'OPTIONS') {
-    res.writeHead(200, headers);
-    res.end();
-  }
 };
 
 const server = http.createServer(requestListener);

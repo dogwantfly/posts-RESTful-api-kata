@@ -2,9 +2,7 @@ const mongoose = require('mongoose');
 
 const Post = require('../models/posts');
 const headers = require('../utils/corsHeaders.js');
-const { successHandler , errorHandler } = require('../utils/responseHandler');
-
-
+const { successHandler, errorHandler } = require('../utils/responseHandler');
 
 module.exports = {
   getPosts: async function (req, res) {
@@ -23,8 +21,8 @@ module.exports = {
           content,
         };
         const result = await Post.create(newPost);
-        
-        successHandler(res, { status: 'success', data: result }, 201)
+
+        successHandler(res, result, 201);
       } else {
         errorHandler(res);
       }
@@ -33,23 +31,22 @@ module.exports = {
     }
   },
 
-  deletePosts: async function(req, res) {
+  deletePosts: async function (req, res) {
     const result = await Post.deleteMany();
-    successHandler(res, { status: 'success', data: result })
+    successHandler(res, result);
   },
 
-  deletePostById: async function (req, res, data, params) { 
+  deletePostById: async function (req, res, data, params) {
     try {
       const { id } = params;
       const result = await Post.findByIdAndDelete(id);
 
       if (result !== null) {
-        successHandler(res, { status: 'success', data: result });
+        successHandler(res, result);
       } else {
         return errorHandler(res);
       }
-    }
-    catch (error) {
+    } catch (error) {
       errorHandler(res, error);
     }
   },
@@ -58,23 +55,25 @@ module.exports = {
     try {
       const { id } = params;
       const { content } = data;
-      
+
       if (!mongoose.isValidObjectId(id)) {
         return errorHandler(res, '貼文 id 不符合格式或不存在');
       }
-      if(!content) {
+      if (!content) {
         return errorHandler(res, '貼文內容不得為空');
       }
       const existingPost = await Post.findById(id);
-      if(!existingPost) {
+      if (!existingPost) {
         return errorHandler(res, '貼文 id 不存在');
       }
       const editContent = { content };
-      const result = await Post.findByIdAndUpdate(id, editContent, { new: true });
+      const result = await Post.findByIdAndUpdate(id, editContent, {
+        new: true,
+      });
       if (!result) {
         return errorHandler(res, '更新錯誤');
       }
-      successHandler(res, { status: 'success', data: result });
+      successHandler(res, result);
     } catch (error) {
       errorHandler(res, error);
     }
