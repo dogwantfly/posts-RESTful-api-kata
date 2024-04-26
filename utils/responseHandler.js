@@ -7,11 +7,15 @@ function successHandler(res, data, statusCode = 200) {
 }
 
 function errorHandler(res, error, statusCode = 400) {
+  const message =
+    error instanceof Error
+      ? error.message
+      : error || '欄位填寫錯誤，或無此貼文 id';
   res.writeHead(statusCode, headers);
   res.write(
     JSON.stringify({
       status: false,
-      message: error || '欄位填寫錯誤，或無此貼文 id',
+      message: message || '欄位填寫錯誤，或無此貼文 id',
     })
   );
   res.end();
