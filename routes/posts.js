@@ -39,6 +39,9 @@ module.exports = {
   deletePostById: async function (req, res, data, params) {
     try {
       const { id } = params;
+      if (!mongoose.isValidObjectId(id)) {
+        return errorHandler(res, '貼文 id 不符合格式或不存在');
+      }
       const result = await Post.findByIdAndDelete(id);
 
       if (result !== null) {
