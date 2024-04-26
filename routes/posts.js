@@ -69,6 +69,7 @@ module.exports = {
       const editContent = { content };
       const result = await Post.findByIdAndUpdate(id, editContent, {
         new: true,
+        runValidators: true,
       });
       if (!result) {
         return errorHandler(res, '更新錯誤');
