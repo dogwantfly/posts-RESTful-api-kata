@@ -1,15 +1,12 @@
 const mongoose = require('mongoose');
 
 const Post = require('../models/posts');
-const headers = require('../utils/corsHeaders.js');
 const { successHandler, errorHandler } = require('../utils/responseHandler');
 
 module.exports = {
   getPosts: async function (req, res) {
     const posts = await Post.find();
-    res.writeHead(200, headers);
-    res.write(JSON.stringify(posts));
-    res.end();
+    successHandler(res, posts);
   },
 
   createPost: async function (req, res, data) {
