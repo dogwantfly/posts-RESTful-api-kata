@@ -1,0 +1,149 @@
+{
+	"info": {
+		"_postman_id": "3b2e51f6-ba9c-45a6-809b-b37c706ccd76",
+		"name": "posts-api-kata",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15020220",
+		"_collection_link": "https://crimson-star-716131.postman.co/workspace/2024-node-todolist-api-kata~1b91253b-c08d-4907-8e68-194de6b33687/collection/15020220-3b2e51f6-ba9c-45a6-809b-b37c706ccd76?action=share&source=collection_link&creator=15020220"
+	},
+	"item": [
+		{
+			"name": "取得所有貼文",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base url}}/posts",
+					"host": [
+						"{{base url}}"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "新增單筆貼文",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Learning Mongoose\",\n    \"content\": \"Today, we explore how to use Mongoose for managing data in Node.js applications.\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base url}}/posts",
+					"host": [
+						"{{base url}}"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "刪除全部貼文",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base url}}/posts",
+					"host": [
+						"{{base url}}"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "刪除單筆貼文",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base url}}/posts/662bdd044342897aea3d6d85",
+					"host": [
+						"{{base url}}"
+					],
+					"path": [
+						"posts",
+						"662bdd044342897aea3d6d85"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "編輯單筆貼文",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"content\": \"test edit\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base url}}/posts/662bdd044342897aea3d6d85",
+					"host": [
+						"{{base url}}"
+					],
+					"path": [
+						"posts",
+						"662bdd044342897aea3d6d85"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base url",
+			"value": "https://posts-restful-api-kata.onrender.com",
+			"type": "string"
+		},
+		{
+			"key": "base url",
+			"value": "http://127.0.0.1:3005",
+			"type": "string",
+			"disabled": true
+		}
+	]
+}
